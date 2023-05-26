@@ -2,13 +2,16 @@ import React, { useState } from 'react'
 import { auth } from '../config/firebase'
 import { signInWithEmailAndPassword } from 'firebase/auth'
 
-import { useDispatch } from 'react-redux'
-import { login } from '../features/userSlice'
+import { useDispatch, useSelector } from 'react-redux'
+import { login, selectUser } from '../features/userSlice'
 
 const Login = () => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const dispatch = useDispatch()
+  const user = useSelector(selectUser)
+
+  console.log(user)
 
   const signIn = async () => {
     try {
@@ -19,6 +22,7 @@ const Login = () => {
           password: password,
         })
       )
+      localStorage.setItem('user', user)
     } catch (error) {
       console.log(error)
     }
