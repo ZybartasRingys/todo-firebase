@@ -1,50 +1,32 @@
-import React, { useState } from 'react'
-import { auth } from '../config/firebase'
-import { signInWithEmailAndPassword } from 'firebase/auth'
+import { useState } from "react";
+import useAuthentication from "../hooks/useAuthentication";
 
-import { useDispatch, useSelector } from 'react-redux'
-import { login, selectUser } from '../features/userSlice'
+function Login() {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const { signInCall } = useAuthentication();
 
-const Login = () => {
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const dispatch = useDispatch()
-  const user = useSelector(selectUser)
+  const signIn = async (email, password) => {
+    await signInCall(email, password);
+  };
 
-  console.log(user)
-
-  const signIn = async () => {
-    try {
-      await signInWithEmailAndPassword(auth, email, password)
-      dispatch(
-        login({
-          email: email,
-          password: password,
-        })
-      )
-      localStorage.setItem('user', user)
-    } catch (error) {
-      console.log(error)
-    }
-  }
   return (
-    <div>
+    <>
       <input
+        type="text"
+        placeholder="email"
         onChange={(e) => setEmail(e.target.value)}
-        type='text'
-        placeholder='Email'
-        required
-      />
-      <input
-        onChange={(e) => setPassword(e.target.value)}
-        type='password'
-        placeholder='Password'
-        required
       />
 
-      <button onClick={signIn}>SignIn</button>
-    </div>
-  )
+      <input
+        type="password"
+        placeholder="password"
+        onChange={(e) => setPassword(e.target.value)}
+      />
+
+      <button onClick={signIn}>signIn</button>
+    </>
+  );
 }
 
-export default Login
+export default Login;

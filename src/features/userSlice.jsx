@@ -1,24 +1,24 @@
-import { createSlice } from '@reduxjs/toolkit'
+import { createSlice } from "@reduxjs/toolkit";
 
 export const userSlice = createSlice({
-  name: 'user',
+  name: "user",
   initialState: {
-    user: null,
+    user: {},
   },
 
   reducers: {
     login: (state, action) => {
-      state.user = action.payload
+      state.user = action.payload;
     },
     // eslint-disable-next-line no-unused-vars
     logout: (state, action) => {
-      state.user = null
+      state.user = {};
     },
   },
-})
+});
 
-export const { login, logout } = userSlice.actions
+export const { login, logout } = userSlice.actions;
 
-export const selectUser = (state) => state.user.user
+export const selectUser = (state) => state.user.user;
 
-export default userSlice.reducer
+export default userSlice.reducer;
