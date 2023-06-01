@@ -1,4 +1,4 @@
-import Login from "./components/Login";
+import Login from './components/Login'
 
 function App() {
   return (
@@ -6,7 +6,7 @@ function App() {
       <p>hello</p>
       <Login />
     </>
-  );
+  )
 }
 
-export default App;
+export default App
