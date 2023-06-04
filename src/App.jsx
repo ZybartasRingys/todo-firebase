@@ -1,21 +1,13 @@
-import Login from "./components/Login";
-import Register from "./components/Register";
-import { useSelector } from "react-redux";
-
-import useAuthentication from "./hooks/useAuthentication";
-
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import HomePage from "./components/HomePage";
 function App() {
-  const user = useSelector(({ userSlice }) => userSlice.user);
-  console.log(user);
-  const { logoutCall } = useAuthentication();
-
   return (
     <>
-      <p>hello {user ? user.email : <p>you need to Login</p>}</p>
-      <Register />
-      <Login />
-
-      <button onClick={logoutCall}>Logout</button>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+        </Routes>
+      </BrowserRouter>
     </>
   );
 }
