@@ -1,17 +1,24 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Login from "../components/Login";
 import Register from "../components/Register";
 import useAuthentication from "../hooks/useAuthentication";
 import { useSelector, useDispatch } from "react-redux";
-import { addTodo } from "../features/dataSlice";
+import { addTodo, fetchTodos } from "../features/dataSlice";
 
 const HomePage = () => {
   const [title, setTitle] = useState("");
   const [completed, setCompleted] = useState(false);
   const dispatch = useDispatch();
   const user = useSelector(({ userSlice }) => userSlice.user);
+  const todos = useSelector((state) => state.todos);
 
   const { logoutCall } = useAuthentication();
+
+  console.log(todos);
+
+  useEffect(() => {
+    dispatch(fetchTodos);
+  }, [dispatch]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
