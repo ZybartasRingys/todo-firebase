@@ -1,5 +1,5 @@
 import { useDispatch } from "react-redux";
-import { collection, getDocs, doc } from "firebase/firestore";
+import { collection, getDocs, doc, addDoc } from "firebase/firestore";
 import { getTodos } from "../features/dataSlice";
 import { db } from "../config/firebase";
 
@@ -21,5 +21,15 @@ export default function useGetTodos() {
     }
   };
 
-  return { fetchTodos };
+  const createTodo = async () => {
+    try {
+      const todo = await addDoc(docRef);
+      const data = console.log(data);
+      dispatch(createTodo(data));
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  return { fetchTodos, createTodo };
 }
