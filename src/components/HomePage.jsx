@@ -16,6 +16,7 @@ const HomePage = () => {
   const { logoutCall } = useAuthentication()
 
   console.log(todos)
+  console.log(title)
 
   const handleSubmit = (e) => {
     e.preventDefault()
@@ -28,7 +29,7 @@ const HomePage = () => {
   }
 
   const fetch = () => {
-    fetchTodos()
+    dispatch(fetchTodos())
   }
 
   return (
@@ -45,10 +46,15 @@ const HomePage = () => {
           onChange={(e) => setTitle(e.target.value)}
         />
         <button type='submit'>Add todo</button>
-        <button onClick={fetch}>Fetch todos</button>
-
-        {todos.length > 0 ? todos.map((todo) => todo.title) : <p>no todos</p>}
       </form>
+      <button onClick={fetch}>Fetch todos</button>
+      <div>
+        {todos.length > 0 ? (
+          todos.map((todo) => <p>{todo.todo.title}</p>)
+        ) : (
+          <p>no todos</p>
+        )}
+      </div>
     </div>
   )
 }

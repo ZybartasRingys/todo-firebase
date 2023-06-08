@@ -9,6 +9,7 @@ export const addTodo = createAsyncThunk('todos/addTodo', async (todo) => {
   try {
     const addTodoRef = await addDoc(collection(db, 'todos'), todo)
     const newTodo = { id: addTodoRef.id, todo }
+    console.log('todo added')
     return newTodo
   } catch (error) {
     console.log(error)
@@ -25,7 +26,8 @@ export const fetchTodos = createAsyncThunk('fetch/todos', async () => {
       id: doc.id,
       todo: doc.data(),
     }))
-
+    console.log('fetched')
+    console.log(todosItems)
     return todosItems
   } catch (error) {
     console.log(error)
@@ -37,7 +39,7 @@ const dataSlice = createSlice({
   initialState: {
     todos: [],
   },
-  reducers: (builder) => {
+  extraReducers: (builder) => {
     builder
       .addCase(addTodo.fulfilled, (state, action) => {
         return {
@@ -48,7 +50,7 @@ const dataSlice = createSlice({
       .addCase(fetchTodos.fulfilled, (state, action) => {
         return {
           ...state,
-          todos: action.payload,
+          todos: [...state.todos, action.payload],
         }
       })
   },
