@@ -1,46 +1,57 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import db from "../config/firebase";
-import { addDoc, collection, getDocs } from "firebase/firestore";
-const initialState = {
-  todos: [],
-};
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
+import db from '../config/firebase'
+import { addDoc, collection, getDocs } from 'firebase/firestore'
 
 /* `export const addTodo` is creating an asynchronous thunk action called "addTodo". This action is
 using the `createAsyncThunk` function from the Redux Toolkit library to handle the asynchronous
 logic of adding a new todo item to a Firebase database. */
-export const addTodo = createAsyncThunk("todos/addTodo", async (todo) => {
+export const addTodo = createAsyncThunk('todos/addTodo', async (todo) => {
   try {
-    await addDoc(collection(db, "todos"), todo);
+    const addTodoRef = await addDoc(collection(db, 'todos'), todo)
+    const newTodo = { id: addTodoRef.id, todo }
+    return newTodo
   } catch (error) {
-    console.log(error);
+    console.log(error)
   }
-});
-export const fetchTodos = createAsyncThunk("fetch/todos", async () => {
+})
+
+/* `export const fetchTodos` is creating an asynchronous thunk action called "fetchTodos". This action
+is using the `createAsyncThunk` function from the Redux Toolkit library to handle the asynchronous
+logic of fetching all todo items from a Firebase database. */
+export const fetchTodos = createAsyncThunk('fetch/todos', async () => {
   try {
-    const query = await getDocs(collection(db, "todos"));
-    console.log(query);
-    const todos = query.docs.map((todo) => ({
-      id: todo.id,
-      todo: todo.data(),
-    }));
-    return todos;
+    const querySnapshot = await getDocs(collection(db, 'todos'))
+    const todosItems = querySnapshot.docs.map((doc) => ({
+      id: doc.id,
+      todo: doc.data(),
+    }))
+
+    return todosItems
   } catch (error) {
-    console.log(error);
+    console.log(error)
   }
-});
+})
 
 const dataSlice = createSlice({
-  name: "dataSlice",
-  initialState,
+  name: 'dataSlice',
+  initialState: {
+    todos: [],
+  },
   reducers: (builder) => {
     builder
       .addCase(addTodo.fulfilled, (state, action) => {
-        state.todos.push(action.payload);
+        return {
+          ...state,
+          todos: [...state.todos, action.payload],
+        }
       })
       .addCase(fetchTodos.fulfilled, (state, action) => {
-        state.todos = action.payload;
-      });
+        return {
+          ...state,
+          todos: action.payload,
+        }
+      })
   },
-});
+})
 
-export default dataSlice.reducer;
+export default dataSlice.reducer

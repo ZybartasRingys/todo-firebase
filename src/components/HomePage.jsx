@@ -1,34 +1,35 @@
-import React, { useEffect, useState } from "react";
-import Login from "../components/Login";
-import Register from "../components/Register";
-import useAuthentication from "../hooks/useAuthentication";
-import { useSelector, useDispatch } from "react-redux";
-import { addTodo, fetchTodos } from "../features/dataSlice";
+import React, { useEffect, useState } from 'react'
+import Login from '../components/Login'
+import Register from '../components/Register'
+import useAuthentication from '../hooks/useAuthentication'
+import { useSelector, useDispatch } from 'react-redux'
+import { addTodo } from '../features/dataSlice'
+import { fetchTodos } from '../features/dataSlice'
 
 const HomePage = () => {
-  const [title, setTitle] = useState("");
-  const [completed, setCompleted] = useState(false);
-  const dispatch = useDispatch();
-  const user = useSelector(({ userSlice }) => userSlice.user);
-  const todos = useSelector((state) => state.todos);
+  const [title, setTitle] = useState('')
+  const [completed, setCompleted] = useState(false)
+  const dispatch = useDispatch()
+  const user = useSelector(({ userSlice }) => userSlice.user)
+  const todos = useSelector((state) => state.dataSlice.todos)
 
-  const { logoutCall } = useAuthentication();
+  const { logoutCall } = useAuthentication()
 
-  console.log(todos);
-
-  useEffect(() => {
-    dispatch(fetchTodos);
-  }, [dispatch]);
+  console.log(todos)
 
   const handleSubmit = (e) => {
-    e.preventDefault();
+    e.preventDefault()
     let todo = {
       title,
       completed,
-    };
+    }
 
-    dispatch(addTodo(todo));
-  };
+    dispatch(addTodo(todo))
+  }
+
+  const fetch = () => {
+    fetchTodos()
+  }
 
   return (
     <div>
@@ -37,16 +38,19 @@ const HomePage = () => {
       <Register />
       <Login />
       <button onClick={logoutCall}>Logout</button>
-      <form action="" onSubmit={handleSubmit}>
+      <form action='' onSubmit={handleSubmit}>
         <input
-          type="text"
-          placeholder="title"
+          type='text'
+          placeholder='title'
           onChange={(e) => setTitle(e.target.value)}
         />
-        <button type="submit">Add todo</button>
+        <button type='submit'>Add todo</button>
+        <button onClick={fetch}>Fetch todos</button>
+
+        {todos.length > 0 ? todos.map((todo) => todo.title) : <p>no todos</p>}
       </form>
     </div>
-  );
-};
+  )
+}
 
-export default HomePage;
+export default HomePage
