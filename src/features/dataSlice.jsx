@@ -1,10 +1,8 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import db from '../config/firebase'
-import { addDoc, collection, getDocs } from 'firebase/firestore'
+import { addDoc, collection, getDocs, deleteDoc, doc } from 'firebase/firestore'
 
-/* `export const addTodo` is creating an asynchronous thunk action called "addTodo". This action is
-using the `createAsyncThunk` function from the Redux Toolkit library to handle the asynchronous
-logic of adding a new todo item to a Firebase database. */
+//add todo to database
 export const addTodo = createAsyncThunk('todos/addTodo', async (todo) => {
   try {
     const addTodoRef = await addDoc(collection(db, 'todos'), todo)
@@ -16,9 +14,7 @@ export const addTodo = createAsyncThunk('todos/addTodo', async (todo) => {
   }
 })
 
-/* `export const fetchTodos` is creating an asynchronous thunk action called "fetchTodos". This action
-is using the `createAsyncThunk` function from the Redux Toolkit library to handle the asynchronous
-logic of fetching all todo items from a Firebase database. */
+// Fetch data from databse
 export const fetchTodos = createAsyncThunk('fetch/todos', async () => {
   try {
     const querySnapshot = await getDocs(collection(db, 'todos'))
@@ -26,13 +22,49 @@ export const fetchTodos = createAsyncThunk('fetch/todos', async () => {
       id: doc.id,
       todo: doc.data(),
     }))
-    console.log('fetched')
-    console.log(todosItems)
+
     return todosItems
   } catch (error) {
     console.log(error)
   }
 })
+
+// Delete todo from db
+
+export const deleteTodo = createAsyncThunk('delete/deleteTodos', async (id) => {
+  try {
+    const todos = await getDocs(collection(db, 'todos'))
+    for (let todo of todos.docs) {
+      if (todo.id === id) {
+        await deleteDoc(doc(db, 'todos', todo.id))
+      }
+    }
+    console.log(todos)
+
+    return id
+  } catch (error) {
+    console.log(error)
+  }
+})
+
+//delete all todos
+
+export const deleteAllTodos = createAsyncThunk(
+  'delete/deleteAllTodos',
+  async () => {
+    try {
+      const todos = await getDocs(collection(db, 'todos'))
+      for (var todo of todos.docs) {
+        if (todo.id === id) {
+          await deleteDoc(doc(db, 'todos', todo.id))
+        }
+      }
+      return []
+    } catch (error) {
+      console.log(error)
+    }
+  }
+)
 
 const dataSlice = createSlice({
   name: 'dataSlice',
@@ -48,10 +80,13 @@ const dataSlice = createSlice({
         }
       })
       .addCase(fetchTodos.fulfilled, (state, action) => {
-        return {
-          ...state,
-          todos: [...state.todos, action.payload],
-        }
+        state.todos = action.payload
+      })
+      .addCase(deleteTodo.fulfilled, (state, action) => {
+        state.todos = state.todos.filter((todo) => todo.id !== action.payload)
+      })
+      .addCase(deleteAllTodos.fulfilled, (state, action) => {
+        state.todos = action.payload
       })
   },
 })

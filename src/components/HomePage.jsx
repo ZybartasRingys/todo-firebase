@@ -3,8 +3,12 @@ import Login from '../components/Login'
 import Register from '../components/Register'
 import useAuthentication from '../hooks/useAuthentication'
 import { useSelector, useDispatch } from 'react-redux'
-import { addTodo } from '../features/dataSlice'
-import { fetchTodos } from '../features/dataSlice'
+import {
+  addTodo,
+  fetchTodos,
+  deleteAllTodos,
+  deleteTodo,
+} from '../features/dataSlice'
 
 const HomePage = () => {
   const [title, setTitle] = useState('')
@@ -14,9 +18,6 @@ const HomePage = () => {
   const todos = useSelector((state) => state.dataSlice.todos)
 
   const { logoutCall } = useAuthentication()
-
-  console.log(todos)
-  console.log(title)
 
   const handleSubmit = (e) => {
     e.preventDefault()
@@ -28,8 +29,15 @@ const HomePage = () => {
     dispatch(addTodo(todo))
   }
 
-  const fetch = () => {
+  useEffect(() => {
     dispatch(fetchTodos())
+  }, [dispatch])
+
+  const deleteItem = () => {
+    dispatch(deleteTodo())
+  }
+  const deleteAll = () => {
+    dispatch(deleteAllTodos())
   }
 
   return (
@@ -49,11 +57,18 @@ const HomePage = () => {
       </form>
       <button onClick={fetch}>Fetch todos</button>
       <div>
-        {todos.length > 0 ? (
-          todos.map((todo) => <p>{todo.todo.title}</p>)
+        {todos?.length > 0 ? (
+          todos.map((todo) => (
+            <div key={todo.id}>
+              {todo.todo.title}
+              <button onClick={() => deleteItem(todo.id)}> delete todo</button>
+            </div>
+          ))
         ) : (
           <p>no todos</p>
         )}
+
+        {todos?.length > 1 && <button onClick={deleteAll}>Delete All</button>}
       </div>
     </div>
   )
