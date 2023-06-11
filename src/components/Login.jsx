@@ -12,6 +12,7 @@ function Login() {
 
   return (
     <>
+      <h1>login</h1>
       <input
         type="text"
         placeholder="email"

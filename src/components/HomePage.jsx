@@ -1,61 +1,59 @@
-import React, { useEffect, useState } from 'react'
-import Login from '../components/Login'
-import Register from '../components/Register'
-import useAuthentication from '../hooks/useAuthentication'
-import { useSelector, useDispatch } from 'react-redux'
+import React, { useEffect, useState } from "react";
+import Login from "../components/Login";
+import Register from "../components/Register";
+import useAuthentication from "../hooks/useAuthentication";
+import { useSelector, useDispatch } from "react-redux";
 import {
   addTodo,
   fetchTodos,
   deleteAllTodos,
   deleteTodo,
-} from '../features/dataSlice'
+} from "../features/dataSlice";
 
 const HomePage = () => {
-  const [title, setTitle] = useState('')
-  const [completed, setCompleted] = useState(false)
-  const dispatch = useDispatch()
-  const user = useSelector(({ userSlice }) => userSlice.user)
-  const todos = useSelector((state) => state.dataSlice.todos)
+  const [title, setTitle] = useState("");
+  const [completed, setCompleted] = useState(false);
+  const dispatch = useDispatch();
+  const user = useSelector(({ userSlice }) => userSlice.user);
+  const todos = useSelector((state) => state.dataSlice.todos);
 
-  const { logoutCall } = useAuthentication()
+  const { logoutCall } = useAuthentication();
 
   const handleSubmit = (e) => {
-    e.preventDefault()
+    e.preventDefault();
     let todo = {
       title,
       completed,
-    }
+    };
 
-    dispatch(addTodo(todo))
-  }
+    dispatch(addTodo(todo));
+  };
 
   useEffect(() => {
-    dispatch(fetchTodos())
-  }, [dispatch])
+    dispatch(fetchTodos());
+  }, [dispatch]);
 
-  const deleteItem = () => {
-    dispatch(deleteTodo())
-  }
+  const deleteItem = (id) => {
+    dispatch(deleteTodo(id));
+  };
   const deleteAll = () => {
-    dispatch(deleteAllTodos())
-  }
+    dispatch(deleteAllTodos());
+  };
 
   return (
     <div>
       HomePage
       <p>hello {user ? user.email : <p>you need to Login</p>}</p>
       <Register />
-      <Login />
       <button onClick={logoutCall}>Logout</button>
-      <form action='' onSubmit={handleSubmit}>
+      <form action="" onSubmit={handleSubmit}>
         <input
-          type='text'
-          placeholder='title'
+          type="text"
+          placeholder="title"
           onChange={(e) => setTitle(e.target.value)}
         />
-        <button type='submit'>Add todo</button>
+        <button type="submit">Add new todo</button>
       </form>
-      <button onClick={fetch}>Fetch todos</button>
       <div>
         {todos?.length > 0 ? (
           todos.map((todo) => (
@@ -68,10 +66,12 @@ const HomePage = () => {
           <p>no todos</p>
         )}
 
-        {todos?.length > 1 && <button onClick={deleteAll}>Delete All</button>}
+        {todos?.length > 1 && (
+          <button onClick={deleteAll}>Clear completed</button>
+        )}
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default HomePage
+export default HomePage;
