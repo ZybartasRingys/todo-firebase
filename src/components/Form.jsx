@@ -103,20 +103,30 @@ function Form() {
                 mr='14px'
                 ml='15px'
               ></Checkbox>
-              {todo.todo.title}
-              <Button
-                width='12px'
-                height='12px'
-                bg='none'
-                border='2px solid yellow'
-                onClick={() => deleteItem(todo.id)}
+              <Box
+                width='100%'
+                pr='15px'
+                display='flex'
+                alignItems='center'
+                justifyContent='space-between'
               >
-                <Cross className='cross' />
-              </Button>
+                {todo.todo.title}
+                <Box
+                  width='12px'
+                  height='12px'
+                  bg='none'
+                  cursor='pointer'
+                  onClick={() => deleteItem(todo.id)}
+                >
+                  <Cross className='cross' />
+                </Box>
+              </Box>
             </Box>
           ))
         ) : (
-          <p>no todos</p>
+          <Text fontSize='12px' ml='20px' mt>
+            No todos
+          </Text>
         )}
 
         <Box
@@ -131,17 +141,16 @@ function Form() {
           pr='20px'
         >
           {`${todos.length} items left`}
-          {todos?.length > 0 && (
-            <Button
-              border='none'
-              bg='none'
-              color='#5B5E7E'
-              fontSize='12px'
-              onClick={deleteAll}
-            >
-              Clear completed
-            </Button>
-          )}
+
+          <Button
+            border='none'
+            bg='none'
+            color='#5B5E7E'
+            fontSize='12px'
+            onClick={deleteAll}
+          >
+            Clear completed
+          </Button>
         </Box>
       </Box>
     </Box>

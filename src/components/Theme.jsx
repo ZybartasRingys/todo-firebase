@@ -7,8 +7,9 @@ const config = {
 
 const theme = extendTheme({
   fonts: {
-    body: `'josefin-sans' sans-serif`,
+    body: `'Josefin-sans' sans-serif`,
   },
+
   config,
 })
 
