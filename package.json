@@ -13,6 +13,7 @@
     "@chakra-ui/react": "^2.7.0",
     "@emotion/react": "^11.11.1",
     "@emotion/styled": "^11.11.0",
+    "@fontsource/josefin-sans": "^5.0.3",
     "@reduxjs/toolkit": "^1.9.5",
     "firebase": "^9.22.0",
     "framer-motion": "^10.12.16",

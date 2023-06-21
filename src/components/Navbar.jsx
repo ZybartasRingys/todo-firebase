@@ -1,16 +1,20 @@
-import { Box, Text } from '@chakra-ui/react'
+import { Box, Text, Button } from '@chakra-ui/react'
+import { useColorMode } from '@chakra-ui/react'
 
 const Navbar = () => {
+  const { colorMode, toggleColorMode } = useColorMode()
   return (
     <Box
-      backgroundImage='/public/bg-mobile-light.jpg'
+      backgroundImage='/public/bg-mobile-dark.jpg'
       backgroundPosition='center'
       backgroundRepeat='no-repeat'
       w='100%'
       h='200px'
-      border='1px solid red'
     >
-      <Text>TODO</Text>
+      <Text color='white'>TODO</Text>
+      <Button onClick={toggleColorMode}>
+        Toggle {colorMode === 'light' ? 'Dark' : 'Light'}
+      </Button>
     </Box>
   )
 }

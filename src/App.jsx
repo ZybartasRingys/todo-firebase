@@ -3,6 +3,7 @@ import HomePage from './components/HomePage'
 import Login from './components/Login'
 import Register from './components/Register'
 import Layout from './components/Layout'
+import './App.css'
 function App() {
   return (
     <>
